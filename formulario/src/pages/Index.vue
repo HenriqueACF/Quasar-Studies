@@ -2,8 +2,11 @@
   <q-page class="container bg-grey-10" padding>
     <p class="text-h4">Formulário</p>
       <q-form 
-        class="row q-col-gutter-md"
-        @submit.prevent.stop="onSubmit">
+        @submit="onSubmit"
+		@reset="onReset"
+        class="row q-col-gutter-lg"
+		ref="myForm"
+		>
     <!--INPUT NOME-->
        <q-input 
         outlined 
@@ -15,6 +18,9 @@
         color="deep-purple"
         label="nome"
         class="col-md-12 col-sm-12 col-xs-12"
+		:rules="[
+			val => val && val.length > 0 || 'Nome obrigatorio'
+		]"
         >
           <template v-slot:prepend>
             <q-icon name="person"/>
@@ -30,6 +36,10 @@
           label="idade"
           color="deep-purple"
           class="col-md-12 col-sm-12 col-xs-12"
+		  :rules="[
+			val => val !== null && val != '' || 'Idade obrigatoria',
+			val => val > 0 && val < 100 || 'Coloque uma Idade Real'
+		]"
         >
            <template v-slot:prepend>
             <q-icon name="person"/>
@@ -48,6 +58,9 @@
           color="deep-purple"
           class="col-md-12 col-sm-12 col-xs-12"
           :loading="true"
+		  :rules="[
+		  	val => val && val.length > 0 || 'E-mail obrigatorio'
+		  ]"
         >
           <template v-slot:prepend>
             <q-icon name="mails"/>
@@ -66,11 +79,50 @@
           class="col-md-12 col-sm-12 col-xs-12"
           mask="(##) #####-####"
           unmasked-value
+		  :rules="[
+		  	val => val && val.length > 0 || 'Telefone obrigatorio',
+			val => val.length === 11 || 'Coloque um telefone real'
+		  ]"
         >
           <template v-slot:prepend>
             <q-icon name="phone"/>
           </template>
         </q-input>
+		<!--INPUT PASSWORD-->
+		<q-input 
+			v-model="form.password" 
+			:type="form.isPwd ? 'password': 'text'" 
+			outlined 
+            rounded
+         	dark
+          	color="deep-purple"
+          	class="col-md-12 col-sm-12 col-xs-12"
+		>
+        <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+        </template>
+      </q-input>
+
+		<div class="col-12">
+			<q-btn
+				label="Cadastrar"
+				type="submit"
+				color="primary"
+				class="float-right"
+			/>	
+
+			<q-btn
+				label="Resetar"
+				type="submit"
+				color="primary"
+				class="float-left"
+			/>	
+		</div>
+
         </q-form>
   </q-page>
 </template>
@@ -85,15 +137,39 @@ export default {
         nome:'',
         idade:null,
         email:'',
-        telefone:''
+        telefone:'',
+		password: '',
+      	isPwd: true,
       }
     }
   },
 
   methods:{
     onSubmit(){
+		this.$q.notify({
+			message:'Cadastro realizado com sucesso!',
+			color:'positive',
+			icon:'check_circle_outline'
+		}),
+		this.onReset()
 
-    }
+    },
+
+	async onReset(){
+		await this.resetForm()
+		this.$refs.myForm.resetValidation()
+	},
+	
+	async resetForm(){
+		this.form = {
+			nome:'',
+			idade:null,
+			email:'',
+			telefone:'',
+			password: '',
+			isPwd: true,
+      }
+	}
   }
 }
 </script>
