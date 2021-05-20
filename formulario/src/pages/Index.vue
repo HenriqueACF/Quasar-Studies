@@ -1,20 +1,20 @@
 <template>
   <q-page class="container bg-grey-10" padding>
     <p class="text-h4">Formulário</p>
-      <q-form 
+      <q-form
         @submit="onSubmit"
 		@reset="onReset"
         class="row q-col-gutter-lg"
 		ref="myForm"
 		>
     <!--INPUT NOME-->
-       <q-input 
-        outlined 
+       <q-input
+        outlined
         rounded
         clearable
         clear-icon="close"
         dark
-        v-model="form.nome" 
+        v-model="form.nome"
         color="deep-purple"
         label="nome"
         class="col-md-12 col-sm-12 col-xs-12"
@@ -30,7 +30,7 @@
         <q-input
           v-model.number="form.idade"
           type="number"
-          outlined 
+          outlined
           dark
           rounded
           label="idade"
@@ -50,7 +50,7 @@
           v-model="form.email"
           label="E-mail"
           suffix="@gmail.com"
-          outlined 
+          outlined
           rounded
           clearable
           clear-icon="close"
@@ -70,7 +70,7 @@
          <q-input
           v-model="form.telefone"
           label="Telefone"
-          outlined 
+          outlined
           rounded
           clearable
           clear-icon="close"
@@ -88,16 +88,46 @@
             <q-icon name="phone"/>
           </template>
         </q-input>
-		<!--INPUT PASSWORD-->
-		<q-input 
-			v-model="form.password" 
-			:type="form.isPwd ? 'password': 'text'" 
-			outlined 
-            rounded
-         	dark
-          	color="deep-purple"
-          	class="col-md-12 col-sm-12 col-xs-12"
-		>
+
+    <!--SELECT-->
+    <q-select
+      outlined
+      rounded
+      dark
+      v-model="form.tipoPessoa"
+      :options="optionsTipoPessoa"
+      label="Tipo de pessoa"
+      class="col-md-12 col-sm-12 col-xs-12"
+      emit-value
+      map-options
+      :rules="[
+        val => val && val.length > 0 || 'Tipo de Pessoa obrigatorio'
+      ]"
+     />
+
+  <!--RADIO BUTTON-->
+
+      <q-option-group
+        dark
+        label="Sexo"
+        :options="optionsSexo"
+        type="radio"
+        v-model="form.sexo"
+        class="col-md-12 col-sm-12 col-xs-12 text-white"
+
+      />
+    
+  <!--INPUT PASSWORD-->
+		<q-input
+      label="Password"
+			v-model="form.password"
+			:type="form.isPwd ? 'password': 'text'"
+			outlined
+      rounded
+      dark
+      color="deep-purple"
+      class="col-md-12 col-sm-12 col-xs-12"
+		 >
         <template v-slot:append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -105,22 +135,23 @@
             @click="isPwd = !isPwd"
           />
         </template>
-      </q-input>
+    </q-input>
 
+    <!--BUTTONS-->
 		<div class="col-12">
 			<q-btn
 				label="Cadastrar"
 				type="submit"
 				color="primary"
 				class="float-right"
-			/>	
+			/>
 
 			<q-btn
 				label="Resetar"
 				type="submit"
 				color="primary"
 				class="float-left"
-			/>	
+			/>
 		</div>
 
         </q-form>
@@ -138,9 +169,22 @@ export default {
         idade:null,
         email:'',
         telefone:'',
-		password: '',
+		    password: '',
       	isPwd: true,
-      }
+        tipoPessoa:'',
+        sexo:'O',
+      },
+
+      optionsTipoPessoa:[
+       {label:'Pessoa Física', value:'PF'},
+       {label:'Pessoa Jurídica', value:'PJ'}
+      ],
+
+      optionsSexo:[
+        {label:'Feminino', value:'F'},
+        {label:'Masculino', value:'M'},
+        {label:'Outro', value:'O'}
+      ],
     }
   },
 
@@ -159,7 +203,7 @@ export default {
 		await this.resetForm()
 		this.$refs.myForm.resetValidation()
 	},
-	
+
 	async resetForm(){
 		this.form = {
 			nome:'',
@@ -168,7 +212,9 @@ export default {
 			telefone:'',
 			password: '',
 			isPwd: true,
-      }
+      tipoPessoa:'',
+      sexo:''
+    }
 	}
   }
 }
