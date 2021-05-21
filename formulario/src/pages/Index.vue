@@ -1,5 +1,5 @@
 <template>
-  <q-page class="container bg-grey-10" padding>
+  <q-page class="container" padding>
     <p class="text-h4">Formulário</p>
       <q-form
         @submit="onSubmit"
@@ -13,7 +13,7 @@
         rounded
         clearable
         clear-icon="close"
-        dark
+
         v-model="form.nome"
         color="deep-purple"
         label="nome"
@@ -31,7 +31,7 @@
           v-model.number="form.idade"
           type="number"
           outlined
-          dark
+
           rounded
           label="idade"
           color="deep-purple"
@@ -54,7 +54,7 @@
           rounded
           clearable
           clear-icon="close"
-          dark
+
           color="deep-purple"
           class="col-md-12 col-sm-12 col-xs-12"
           :loading="true"
@@ -74,14 +74,14 @@
           rounded
           clearable
           clear-icon="close"
-          dark
+
           color="deep-purple"
           class="col-md-12 col-sm-12 col-xs-12"
           mask="(##) #####-####"
           unmasked-value
 		  :rules="[
 		  	val => val && val.length > 0 || 'Telefone obrigatorio',
-			val => val.length === 11 || 'Coloque um telefone real'
+			  val => val.length === 11 || 'Coloque um telefone real'
 		  ]"
         >
           <template v-slot:prepend>
@@ -93,7 +93,6 @@
     <q-select
       outlined
       rounded
-      dark
       v-model="form.tipoPessoa"
       :options="optionsTipoPessoa"
       label="Tipo de pessoa"
@@ -106,17 +105,15 @@
      />
 
   <!--RADIO BUTTON-->
-
+      <span>Sexo:</span>
       <q-option-group
-        dark
         label="Sexo"
         :options="optionsSexo"
         type="radio"
         v-model="form.sexo"
-        class="col-md-12 col-sm-12 col-xs-12 text-white"
-
+        class="col-md-12 col-sm-12 col-xs-12"
       />
-    
+
   <!--INPUT PASSWORD-->
 		<q-input
       label="Password"
@@ -124,7 +121,6 @@
 			:type="form.isPwd ? 'password': 'text'"
 			outlined
       rounded
-      dark
       color="deep-purple"
       class="col-md-12 col-sm-12 col-xs-12"
 		 >
@@ -134,6 +130,7 @@
             class="cursor-pointer"
             @click="isPwd = !isPwd"
           />
+
         </template>
     </q-input>
 
