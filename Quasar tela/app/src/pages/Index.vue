@@ -19,20 +19,13 @@
 
         <q-btn
           class="btn"
-          color="primary" 
-          label="Cadastrar" 
+          color="primary"
+          label="Cadastrar"
         />
 
       </div>
 
-      <div class="table">
-        <q-table
-        title="Equipamentos cadastrados"
-        :data="data"
-        :columns="columns"
-        row-key="name"
-        />
-      </div>
+     
     </div>
   </q-page>
 </template>
@@ -52,26 +45,7 @@
           'Equipamento 3',
           'Equipamento 4'
         ],
-         columns: [
-          {
-            name: 'name',
-            required: true,
-            align: 'center',
-            field: row => row.name,
-            format: val => `${val}`,
-            sortable: true
-        },
-          { name: 'equipamento', align: 'left', label: 'Nome do Equipamento' },
-          { name: 'tpequipamento', align: 'center', label: 'Tipo do Equipamento' }
-        ],
-        data: [
-        {
-          name: 'Notebook',
-        },
-        {
-          name: 'Monitor'
-        },
-      ]
+        
       }
     }
   }
@@ -90,7 +64,7 @@
   .inputEqp{
     width: 250px;
     margin-right: 15px;
-    
+
   }
 
   .selectTipoEqp{
