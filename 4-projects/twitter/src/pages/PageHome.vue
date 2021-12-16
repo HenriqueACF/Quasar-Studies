@@ -105,6 +105,8 @@
 </template>
 
 <script>
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import db from "src/boot/firebase";
 import { formatDistance } from "date-fns";
 
 export default {
@@ -113,21 +115,21 @@ export default {
     return {
       newQTweetContent: "",
       qweets: [
-        {
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
-          date: 1639343467166,
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
-          date: 1639343492395,
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
-          date: 1639343508722,
-        },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
+        //   date: 1639343467166,
+        // },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
+        //   date: 1639343492395,
+        // },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus suscipit dui, sed malesuada nih tempor vel. Proin a justo scelerisque, auctor ligula nec, porttitor libero. Vestibulum accumsan a diam non imperdiet. Vestibulum consectetur, est vitae porttitor maximus, neque augue maximus mauris, vitae bibendum nisl arcu id mauris. Cras consectetur aliquam massa, eu aliquet tortor efficitur nec. Praesent eget risus dui. Nunc in justo velit. Etiam a mi risus. Morbi eleifend sapien eu ex varius auctor. Praesent consectetur lobortis leo, nec hendrerit lorem. Suspendisse augue nulla, feugiat et sagittis a, scelerisque eu risus. Sed sed mollis leo, id commodo sem. Sed fermentum dapibus metus, nec lacinia metus ultricies eget. Donec venenatis, odio a consectetur semper, neque nibh ultrices dolor, eu pulvinar dolor urna et lorem. Sed non semper sem. Cras non diam non enim varius sodales.",
+        //   date: 1639343508722,
+        // },
       ],
     };
   },
@@ -154,7 +156,24 @@ export default {
       return formatDistance(value, new Date());
     },
   },
-};
+  mounted() {
+    db.collection('qweets').orderBy('date').onSnapshot(snapshot =>{
+      snapshot.docChanges().forEach(change =>{
+        let qweetChange = change.doc.data()
+        if(change.type === 'added'){
+          console.log('new qweet:', qweetChange)
+          this.qweets.unshift(qweetChange)
+        }
+        if(change.type === 'modified'){
+          console.log('modified qweet:', qweetChange)
+        }
+        if(change.type === 'removed'){
+          console.log('removed qweet:', qweetChange)
+        }
+      })
+    })
+  }
+}
 </script>
 
 <style lang="sass">
