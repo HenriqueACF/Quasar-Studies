@@ -20,7 +20,6 @@
         <q-btn
         class="full-width" 
         color="primary" 
-        icon="check" 
         label="Register" 
         outline
         rounded
