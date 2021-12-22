@@ -2,7 +2,7 @@
   <q-page padding>
    <q-form
      class="row justify-center" @submit.prevent="handleRegister">
-     <p class="text-h5 text-center">Register</p>
+     <p class="col-12 text-h5 text-center">Register</p>
      <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
        <q-input 
         v-model="form.name" 
@@ -16,7 +16,7 @@
        v-model="form.password" 
        label="Password"
       />
-      <div class="full-width q-pt-md">
+      <div class="full-width q-pt-md q-gutter-y-sm">
         <q-btn
         class="full-width" 
         color="primary" 
@@ -24,6 +24,14 @@
         outline
         rounded
         type="submit"
+      />
+      <q-btn
+        class="full-width" 
+        color="dark" 
+        label="Back" 
+        flat
+        rounded
+        :to="{ name: 'login' }"
       />
       </div>
      </div>
