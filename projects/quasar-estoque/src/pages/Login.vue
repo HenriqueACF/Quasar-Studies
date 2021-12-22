@@ -7,10 +7,19 @@
        <q-input 
         v-model="form.email" 
         label="E-mail" 
+        lazy-rules
+        :rules="[
+          val => (val && val.length > 0) || 'Email is required'
+        ]"
+        type="email"
       />
       <q-input
        v-model="form.password" 
        label="Password"
+       lazy-rules
+       :rules="[
+          val => (val && val.length > 0) || 'Password is required'
+        ]"
       />
       <div class="full-width q-pt-md">
         <q-btn
@@ -49,6 +58,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import useAuthUser from 'src/composables/UseAuthUser'
+import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
@@ -57,6 +67,7 @@ export default defineComponent({
   setup(){
     const router = useRouter()
     const { login } = useAuthUser()
+    const { notifyError, notifySuccess } = useNotify
     const form = ref({
       email:'',
       password:''
@@ -65,9 +76,10 @@ export default defineComponent({
     const handleLogin = async () => {
       try{
         await login(from.value)
+        notifySuccess('Login Successfully')
         router.push({name: 'me'})
       }catch(error){
-        alert(error.message)
+        notifyError(error.message)
       }
     }
 

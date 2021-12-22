@@ -7,12 +7,17 @@
        <q-input 
         v-model="password" 
         label="New Password" 
+        lazy-rules
+        :rules="[
+          val => (val && val.length >= 6) || 'Password is required'
+        ]"
+        type="password"
       />
       <div class="full-width q-pt-md q-gutter-y-sm">
         <q-btn
         class="full-width" 
         color="primary" 
-        label="Send Reset Email" 
+        label="Send New Password" 
         outline
         rounded
         type="submit"
@@ -28,6 +33,7 @@
 import { defineComponent, ref } from 'vue'
 import useAuthUser from 'src/composables/UseAuthUser'
 import { useRouter, useRoute } from 'vue-router'
+import useNotify from 'src/composables/UseNotify'
 
 export default defineComponent ({
   name: 'PageResetPassword',
@@ -36,11 +42,17 @@ export default defineComponent ({
     const route = useRoute()
     const router = useRouter()
     const token = route.query.token
+    const { notifyError, notifySuccess } = useNotify
 
     const password = ref('')
     const handlePasswordReset = async () =>{
-      await resetPassword(token, password.value)
-      router.push({ name:'login'})
+      try{
+        await resetPassword(token, password.value)
+        notifySuccess('New Password Sent')
+        router.push({ name:'login'})
+      }catch(error){
+        notifyError(error.message)
+      }
     }
 
     return {
