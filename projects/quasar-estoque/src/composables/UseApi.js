@@ -2,7 +2,7 @@ import useSupaBase from 'src/boot/supabase'
 import useAuthUser from './UseAuthUser'
 
 export default function useApi(){
-  const supabase = useSupaBase()
+  const { supabase } = useSupaBase()
   const { user } = useAuthUser()
   
   const list = async (table) => {
