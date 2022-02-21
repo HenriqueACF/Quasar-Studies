@@ -1,4 +1,4 @@
-# Quasar Estoque (quasar-estoque)
+# Quasar App (quasar-supabase)
 
 A Quasar Framework app
 
@@ -12,6 +12,10 @@ yarn
 quasar dev
 ```
 
+### Lint the files
+```bash
+yarn lint
+```
 
 ### Build the app for production
 ```bash
