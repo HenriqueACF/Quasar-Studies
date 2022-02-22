@@ -23,7 +23,7 @@
         />
         </div>
 
-        <div class='full-width'>
+        <div class='full-width q-gutter-y-sm'>
           <q-btn
           label='Register'
           color='primary'
@@ -31,8 +31,20 @@
           flat
           rounded
           to='/register'
+          size='sm'
         />
+
+          <q-btn
+            label='Forgot Password?'
+            color='primary'
+            class='full-width'
+            flat
+            rounded
+            :to="{ name: 'forgot-password'}"
+            size='sm'
+          />
         </div>
+
       </div>
     </q-form>
   </q-page>
