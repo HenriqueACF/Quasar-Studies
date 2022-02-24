@@ -7,6 +7,9 @@
         <q-input
           label="E-mail"
           v-model='email'
+          lazy-rules
+          :rules="[val =>(val && val.length > 0) || 'E-mail is required']"
+          type='email'
         />
 
         <div class='full-width q-pt-md q-gutter-y-sm'>
@@ -35,17 +38,23 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import useAuthUser from 'src/composables/UseAuthUser'
+import useNotify from 'src/composables/UseNotify'
 
 export default defineComponent({
   name: 'PageForgotPassword',
   setup () {
     const { sendPasswordRestEmail } = useAuthUser()
+    const { notifyError, notifySuccess } = useNotify()
 
     const email = ref('')
 
     const handleForgotPassword = async () => {
-      await sendPasswordRestEmail(email.value)
-      alert(`password reset email sent to ${email.value}`)
+      try {
+        await sendPasswordRestEmail(email.value)
+        notifySuccess(`password reset email sent to ${email.value}`)
+      } catch (error) {
+        notifyError(error.message)
+      }
     }
 
     return {
