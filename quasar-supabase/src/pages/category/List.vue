@@ -3,10 +3,11 @@
     <div class='row'>
       <q-table
         title="Category"
-        :rows="rows"
+        :rows="categories"
         :columns="columns"
         row-key="id"
         class="col-12"
+        :loading="loading"
       >
         <template v-slot:top>
           <span class="text-6">Category</span>
@@ -35,23 +36,39 @@
 <script>
 const columns = [
   { name: 'name', align: 'left', label: 'Name', field: 'name', sortable: true },
-  { name: 'actions', align: 'left', label: 'Actions', field: 'actions' }
+  { name: 'actions', align: 'left', label: 'Actions', field: 'actions', sortable: true }
 ]
 
-const rows = [
-  {
-    id: '123',
-    name: 'Tenis'
-  }
-]
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+import useApi from 'src/composables/UseApi'
+import useNotify from 'src/composables/UseNotify'
 
 export default defineComponent({
   name: 'PageCategoryList',
   setup () {
+    const categories = ref([])
+    const { list } = useApi()
+    const { notifyError } = useNotify()
+    const loading = ref(true)
+
+    const handleListCategories = async () => {
+      try {
+        loading.value = true
+        categories.value = await list('category')
+        loading.value = false
+      } catch (error) {
+        notifyError(error.message)
+      }
+    }
+
+    onMounted(() => {
+      handleListCategories()
+    })
+
     return {
       columns,
-      rows
+      categories,
+      loading
     }
   }
 })
