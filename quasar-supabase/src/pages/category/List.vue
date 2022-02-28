@@ -12,11 +12,17 @@
         <template v-slot:top>
           <span class="text-6">Category</span>
           <q-space/>
-          <q-btn label="Add New" color="primary"/>
+          <q-btn
+              label="Add New"
+              color="primary"
+              icon="mdi-plus"
+              dense
+              :to="{ name: 'form-category'}"
+          />
         </template>
         <template v-slot:body-cell-actions="props">
           <q-td :props="props" class="q-gutter-x-sm">
-            <q-btn icon="mdi-pecil-outline" color="info" dense size="sm">
+            <q-btn icon="mdi-pencil-outline" color="info" dense size="sm" @click="handleEdit(props.row)">
               <q-tooltip>
                 Edit
               </q-tooltip>
@@ -36,12 +42,13 @@
 <script>
 const columns = [
   { name: 'name', align: 'left', label: 'Name', field: 'name', sortable: true },
-  { name: 'actions', align: 'left', label: 'Actions', field: 'actions', sortable: true }
+  { name: 'actions', align: 'right', label: 'Actions', field: 'actions', sortable: true }
 ]
 
 import { defineComponent, ref, onMounted } from 'vue'
 import useApi from 'src/composables/UseApi'
 import useNotify from 'src/composables/UseNotify'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'PageCategoryList',
@@ -50,6 +57,7 @@ export default defineComponent({
     const { list } = useApi()
     const { notifyError } = useNotify()
     const loading = ref(true)
+    const router = useRouter()
 
     const handleListCategories = async () => {
       try {
@@ -61,6 +69,10 @@ export default defineComponent({
       }
     }
 
+    const handleEdit = (category) => {
+      router.push({ name: 'form-category', params: { id: category.id } })
+    }
+
     onMounted(() => {
       handleListCategories()
     })
@@ -68,7 +80,8 @@ export default defineComponent({
     return {
       columns,
       categories,
-      loading
+      loading,
+      handleEdit
     }
   }
 })

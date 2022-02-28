@@ -1,6 +1,7 @@
 
 const routes = [
   {
+    // ROTAS LOGADAS
     path: '/',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
@@ -13,11 +14,13 @@ const routes = [
     ]
   },
   {
+    // ROTAS PUBLICAS
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: 'me', name: 'me', component: () => import('pages/Me.vue') },
-      { path: 'category', name: 'category', component: () => import('pages/category/List.vue') }
+      { path: 'category', name: 'category', component: () => import('pages/category/List.vue') },
+      { path: 'form-category/:id?', name: 'form-category', component: () => import('pages/category/Form.vue') }
     ],
     meta: {
       requiresAuth: true
