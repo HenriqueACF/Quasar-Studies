@@ -27,7 +27,7 @@
                 Edit
               </q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-delete-outline" color="negative" dense size="sm">
+            <q-btn icon="mdi-delete-outline" color="negative" dense size="sm" @click="handleRemoveCategory(props.row)">
               <q-tooltip>
                 Remove
               </q-tooltip>
@@ -49,20 +49,23 @@ import { defineComponent, ref, onMounted } from 'vue'
 import useApi from 'src/composables/UseApi'
 import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'PageCategoryList',
   setup () {
     const categories = ref([])
-    const { list } = useApi()
-    const { notifyError } = useNotify()
+    const { list, remove } = useApi()
+    const { notifyError, notifySuccess } = useNotify()
     const loading = ref(true)
     const router = useRouter()
+    const table = 'category'
+    const $q = useQuasar()
 
     const handleListCategories = async () => {
       try {
         loading.value = true
-        categories.value = await list('category')
+        categories.value = await list(table)
         loading.value = false
       } catch (error) {
         notifyError(error.message)
@@ -73,6 +76,23 @@ export default defineComponent({
       router.push({ name: 'form-category', params: { id: category.id } })
     }
 
+    const handleRemoveCategory = async (category) => {
+      try {
+        $q.dialog({
+          title: 'Confirm',
+          message: `Do you really delete ${category.name}?`,
+          cancel: true,
+          persistent: true
+        }).onOk(async () => {
+          await remove(table, category.id)
+          notifySuccess('Succesfully deleted')
+          handleListCategories()
+        })
+      } catch (error) {
+        notifyError(error.message)
+      }
+    }
+
     onMounted(() => {
       handleListCategories()
     })
@@ -81,7 +101,8 @@ export default defineComponent({
       columns,
       categories,
       loading,
-      handleEdit
+      handleEdit,
+      handleRemoveCategory
     }
   }
 })
