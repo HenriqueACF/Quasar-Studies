@@ -69,6 +69,11 @@ const linksList = [
     title: 'Category',
     icon: 'mdi-shape-outline',
     routeName: 'category'
+  },
+  {
+    title: 'Product',
+    icon: 'mdi-archive',
+    routeName: 'product'
   }
 ]
 
