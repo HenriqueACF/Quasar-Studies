@@ -5,6 +5,15 @@
         <p class="text-h6">Form Product</p>
       </div>
       <q-form class="col-md7 col-xs-12 col-sm-12 q-gutter-y-md" @submit.prevent="handleSubmit">
+
+        <q-input
+            label="Image"
+            stack-label
+            v-model="img"
+            accept="image/*"
+            type="file"
+        />
+
         <q-input
           label="Name"
           v-model="form.name"
@@ -75,7 +84,7 @@ export default defineComponent({
     const table = 'product'
     const router = useRouter()
     const route = useRoute()
-    const { post, getById, update, list } = useApi()
+    const { post, getById, update, list, uploadImg } = useApi()
     const { notifyError, notifySuccess } = useNotify()
 
     const isUpdate = computed(() => route.params.id)
@@ -87,8 +96,10 @@ export default defineComponent({
       description: '',
       amount: 0,
       price: 0,
-      category_id: ''
+      category_id: '',
+      img_url: ''
     })
+    const img = ref([])
 
     onMounted(() => {
       handleListCategories()
@@ -103,6 +114,10 @@ export default defineComponent({
 
     const handleSubmit = async () => {
       try {
+        if (img.value.length > 0) {
+          const imgUrl = await uploadImg(img.value[0], 'products')
+          form.value.img_url = imgUrl
+        }
         if (isUpdate.value) {
           await update(table, form.value)
           notifySuccess('Update Successfully')
@@ -129,7 +144,8 @@ export default defineComponent({
       handleSubmit,
       form,
       isUpdate,
-      optionsCategory
+      optionsCategory,
+      img
     }
   }
 
