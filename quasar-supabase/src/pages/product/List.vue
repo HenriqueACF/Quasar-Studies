@@ -1,24 +1,35 @@
 <template>
   <q-page padding>
-    <div class='row'>
+    <div class="row">
       <q-table
-         title="Product"
-        :rows="products"
-        :columns="columnsProduct"
-        row-key="id"
-        class="col-12"
-        :loading="loading"
+          :rows="products"
+          :columns="columnsProduct"
+          row-key="id"
+          class="col-12"
+          :loading="loading"
       >
         <template v-slot:top>
-          <span class="text-6">Product</span>
-          <q-space/>
+          <span class="text-h6">
+            Product
+          </span>
+          <q-btn
+              label="My Store"
+              dense
+              size="sm"
+              outline
+              class="q-ml-sm"
+              icon="mdi-store"
+              color="primary"
+              @click="handleGoToStore"
+          />
+          <q-space />
           <q-btn
               v-if="$q.platform.is.desktop"
               label="Add New"
               color="primary"
               icon="mdi-plus"
               dense
-              :to="{ name: 'form-product'}"
+              :to="{ name: 'form-product' }"
           />
         </template>
         <template v-slot:body-cell-img_url="props">
@@ -38,7 +49,7 @@
             </q-btn>
             <q-btn icon="mdi-delete-outline" color="negative" dense size="sm" @click="handleRemoveProduct(props.row)">
               <q-tooltip>
-                Remove
+                Delete
               </q-tooltip>
             </q-btn>
           </q-td>
@@ -47,13 +58,14 @@
     </div>
     <q-page-sticky
         position="bottom-right"
-        :offset="[18,18]">
+        :offset="[18, 18]"
+    >
       <q-btn
-        v-if="$q.platform.is.mobile"
-        fab
-        icon="mdi-plus"
-        color="primary"
-        :to="{ name: 'form-product'}"
+          v-if="$q.platform.is.mobile"
+          fab
+          icon="mdi-plus"
+          color="primary"
+          :to="{ name: 'form-product' }"
       />
     </q-page-sticky>
   </q-page>
@@ -62,63 +74,64 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
 import useApi from 'src/composables/UseApi'
+import useAuthUser from 'src/composables/UseAuthUser'
 import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { columnsProduct } from 'pages/product/table'
-
+import { columnsProduct } from './table'
 export default defineComponent({
   name: 'PageProductList',
   setup () {
     const products = ref([])
-    const { list, remove } = useApi()
-    const { notifyError, notifySuccess } = useNotify()
     const loading = ref(true)
     const router = useRouter()
     const table = 'product'
     const $q = useQuasar()
-
+    const { listPublic, remove } = useApi()
+    const { user } = useAuthUser()
+    const { notifyError, notifySuccess } = useNotify()
     const handleListProducts = async () => {
       try {
         loading.value = true
-        products.value = await list(table)
+        products.value = await listPublic(table, user.value.id)
         loading.value = false
       } catch (error) {
         notifyError(error.message)
       }
     }
-
     const handleEdit = (category) => {
       router.push({ name: 'form-product', params: { id: category.id } })
     }
-
     const handleRemoveProduct = async (category) => {
       try {
         $q.dialog({
           title: 'Confirm',
-          message: `Do you really delete ${category.name}?`,
+          message: `Do you really delete ${category.name} ?`,
           cancel: true,
           persistent: true
         }).onOk(async () => {
           await remove(table, category.id)
-          notifySuccess('Succesfully deleted')
+          notifySuccess('successfully deleted')
           handleListProducts()
         })
       } catch (error) {
         notifyError(error.message)
       }
     }
-
+    const handleGoToStore = () => {
+      const idUser = user.value.id
+      router.push({ name: 'product-public', params: { id: idUser } })
+    }
     onMounted(() => {
       handleListProducts()
     })
-
     return {
       columnsProduct,
       products,
       loading,
       handleEdit,
-      handleRemoveProduct
+      handleRemoveProduct,
+      handleGoToStore
     }
   }
 })
