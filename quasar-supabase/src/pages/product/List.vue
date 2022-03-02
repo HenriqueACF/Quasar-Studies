@@ -65,7 +65,7 @@ import useApi from 'src/composables/UseApi'
 import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { columnsProduct } from 'pages/category/table'
+import { columnsProduct } from 'pages/product/table'
 
 export default defineComponent({
   name: 'PageProductList',
