@@ -12,7 +12,7 @@
         />
 
         <q-editor
-            v-model="description"
+            v-model="form.description"
             min-height="5rem"
         />
 
@@ -20,7 +20,7 @@
             label="Amount"
             v-model="form.amount"
             type="number"
-            :rules="[val => (val && val.length > 0) || 'Amount is required']"
+            :rules="[val => !!val || 'Amount is required']"
         />
 
         <q-input
@@ -28,7 +28,7 @@
             v-model="form.price"
             type="number"
             prefix="R$"
-            :rules="[val => (val && val.length > 0) || 'Price is required']"
+            :rules="[val => !!val || 'Price is required']"
         />
 
         <q-select
@@ -39,6 +39,7 @@
             option-label="name"
             map-options
             emit-value
+            :rules="[val => !!val || 'Category is required']"
         />
 
         <q-btn
