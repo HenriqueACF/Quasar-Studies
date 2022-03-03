@@ -2,7 +2,7 @@
   <q-dialog
     :full-width="$q.platform.is.mobile"
     :model-value="showDialog"
-    @before-hide="handleClose"
+    @before-hide="handleCloseWpp"
   >
     <q-card>
       <q-card-section>
