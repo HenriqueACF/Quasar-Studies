@@ -12,6 +12,7 @@
           <span class="text-h6">
             Product
           </span>
+
           <q-btn
               label="My Store"
               dense
@@ -21,6 +22,17 @@
               icon="mdi-store"
               color="primary"
               @click="handleGoToStore"
+          />
+
+          <q-btn
+              label="Copy Link"
+              dense
+              size="sm"
+              outline
+              class="q-ml-sm"
+              icon="mdi-content-copy"
+              color="primary"
+              @click="handleCopyPublicUrl"
           />
           <q-space />
           <q-btn
@@ -77,8 +89,9 @@ import useApi from 'src/composables/UseApi'
 import useAuthUser from 'src/composables/UseAuthUser'
 import useNotify from 'src/composables/UseNotify'
 import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
+import { useQuasar, openURL, copyToClipboard } from 'quasar'
 import { columnsProduct } from './table'
+
 export default defineComponent({
   name: 'PageProductList',
   setup () {
@@ -120,8 +133,24 @@ export default defineComponent({
     }
     const handleGoToStore = () => {
       const idUser = user.value.id
-      router.push({ name: 'product-public', params: { id: idUser } })
+      const link = router.resolve({ name: 'product-public', params: { id: idUser } })
+      // router.push({ name: 'product-public', params: { id: idUser } })
+      openURL(window.origin + link.href)
     }
+
+    const handleCopyPublicUrl = () => {
+      const idUser = user.value.id
+      const link = router.resolve({ name: 'product-public', params: { id: idUser } })
+      const externalLink = window.origin + link.href
+      copyToClipboard(externalLink)
+        .then(() => {
+          notifySuccess('Successfully copied')
+        })
+        .catch(() => {
+          notifyError('Error to copied link')
+        })
+    }
+
     onMounted(() => {
       handleListProducts()
     })
@@ -131,7 +160,8 @@ export default defineComponent({
       loading,
       handleEdit,
       handleRemoveProduct,
-      handleGoToStore
+      handleGoToStore,
+      handleCopyPublicUrl
     }
   }
 })
