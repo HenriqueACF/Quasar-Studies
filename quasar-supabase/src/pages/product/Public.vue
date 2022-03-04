@@ -1,8 +1,8 @@
 <template>
   <q-page padding>
-    <div class="row" v-if="brand.value.name">
+    <div class="row" v-if="brand.name">
       <div class="col-12 text-center text-h4">
-        {{brand.name}}
+        {{ brand.name }}
       </div>
     </div>
     <div class="row">
@@ -20,6 +20,7 @@
           dense
           @update:model-value="handleListProducts(route.params.id)"
       />
+
       <q-table
           :rows="products"
           :columns="columnsProduct"
@@ -55,9 +56,9 @@
       </q-table>
     </div>
     <dialog-product-details
-      :showDialog="showDialogDetails"
-      :product="productDetails"
-      @hide-dialog="showDialogDetails =  false"
+        :showDialog="showDialogDetails"
+        :product="productDetails"
+        @hide-dialog="showDialogDetails = false"
     />
   </q-page>
 </template>
@@ -98,19 +99,17 @@ export default defineComponent({
         notifyError(error.message)
       }
     }
-
     const handleShowDetails = (product) => {
       productDetails.value = product
       showDialogDetails.value = true
     }
-
-    const handleListCategories = async (userId) => {
+    const hadleListCategories = async (userId) => {
       optionsCategories.value = await listPublic('category', userId)
     }
 
     onMounted(() => {
       if (route.params.id) {
-        handleListCategories(route.params.id)
+        hadleListCategories(route.params.id)
         handleListProducts(route.params.id)
       }
     })
@@ -123,11 +122,11 @@ export default defineComponent({
       showDialogDetails,
       productDetails,
       handleShowDetails,
+      handleListProducts,
       brand,
       optionsCategories,
       categoryId,
-      route,
-      handleListProducts
+      route
     }
   }
 })
