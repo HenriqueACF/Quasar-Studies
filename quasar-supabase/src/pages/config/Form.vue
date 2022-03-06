@@ -18,6 +18,14 @@
             unmasked-value
         />
 
+        <q-input
+          label="Image Parallax"
+          v-model="parallax"
+          stack-label
+          type="file"
+          accept="image/*"
+        />
+
         <div class="row justify-center q-gutter-md q-pa-md">
             <q-color class="col-md-4 col-sm-12 col-xs-12 text-center" v-model="form.primary"/>
             <q-color class="col-md-4 col-sm-12 col-xs-12 text-center" v-model="form.secondary"/>
@@ -57,17 +65,19 @@ export default defineComponent({
   setup () {
     const table = 'config'
     const router = useRouter()
-    const { post, listPublic, update } = useApi()
+    const { post, listPublic, update, uploadImg } = useApi()
     const { notifyError, notifySuccess } = useNotify()
     const { setBrand } = useBrand()
     const { user } = useAuthUser()
 
     let config = {}
+    const parallax = ref([])
     const form = ref({
       name: '',
       phone: '',
       primary: '',
-      secondary: ''
+      secondary: '',
+      parallax_url: ''
     })
 
     onMounted(() => {
@@ -76,6 +86,10 @@ export default defineComponent({
 
     const handleSubmit = async () => {
       try {
+        if (parallax.value.length > 0) {
+          const parallaxUrl = await uploadImg(parallax.value[0], 'parallax')
+          form.value.parallax_url = parallaxUrl
+        }
         if (form.value.id) {
           await update(table, form.value)
           notifySuccess('Update Successfully')
@@ -101,7 +115,8 @@ export default defineComponent({
 
     return {
       handleSubmit,
-      form
+      form,
+      parallax
     }
   }
 
