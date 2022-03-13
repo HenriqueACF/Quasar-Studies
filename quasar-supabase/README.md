@@ -9,7 +9,9 @@ yarn
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-quasar dev
+quasar dev 
+### OR
+quasar dev -m pwa
 ```
 
 ### Lint the files
@@ -20,6 +22,8 @@ yarn lint
 ### Build the app for production
 ```bash
 quasar build
+### OR
+quasar build -m pwa
 ```
 
 ### Customize the configuration
