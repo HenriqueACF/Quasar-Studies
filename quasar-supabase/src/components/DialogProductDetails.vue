@@ -63,7 +63,7 @@ export default defineComponent({
   },
   setup (props, { emit }) {
     // const phone = '91981955168'
-    const msg = 'Teste envio wpp'
+    const msg = 'Olá, fiquei interessado neste produto:'
     const { brand } = useApi()
 
     const handleCloseWpp = () => {

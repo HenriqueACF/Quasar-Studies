@@ -167,11 +167,11 @@ module.exports = configure(function (ctx) {
       manifest: {
         name: 'Quasar App',
         short_name: 'Quasar App',
-        description: 'A Quasar Framework app',
+        description: 'Seu estoque de forma simples',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
-        theme_color: '#027be3',
+        theme_color: '#2c9c6a',
         icons: [
           {
             src: 'icons/icon-128x128.png',
