@@ -122,7 +122,7 @@ module.exports = configure(function (ctx) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -173,6 +173,7 @@ module.exports = configure(function (ctx) {
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#2c9c6a',
+        categories: ['utilities', 'productivity', 'personalization'],
         icons: [
           {
             src: 'icons/icon-128x128.png',
