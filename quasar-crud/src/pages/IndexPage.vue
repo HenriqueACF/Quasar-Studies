@@ -1,11 +1,16 @@
 <template>
   <q-page padding>
     <q-table
-      title="Treats"
+      title="Artigos"
       :rows="posts"
       :columns="columns"
       row-key="name"
     >
+      <template v-slot:top>
+        <spam class="text-h5">Artigos</spam>
+        <q-space/>
+        <q-btn color="primary" label="Novo" :to="{name: 'formPost'}"/>
+      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <q-btn icon="delete" color="negative" dense size="sm" @click="handleDeletePosts(props.row.id)"/>
