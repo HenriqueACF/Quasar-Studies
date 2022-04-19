@@ -40,26 +40,46 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import postService from 'src/services/posts'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'formPost',
   setup () {
     const $q = useQuasar()
-    const { post } = postService()
-    const router = useRouter
+    const { post, getById, update } = postService()
+    const router = useRouter()
+    const route = useRoute()
     const form = ref({
       title: '',
       content: '',
       author: ''
     })
 
+    onMounted(async () => {
+      if (route.params.id) {
+        getPost(route.params.id)
+      }
+    })
+
+    const getPost = async (id) => {
+      try {
+        const response = await getById(id)
+        form.value = response
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
     const onSubmit = async () => {
       try {
-        await post(form.value)
+        if (form.value.id) {
+          await update(form.value)
+        } else {
+          await post(form.value)
+        }
         $q.notify({ message: 'Post criado com sucesso', icon: 'check', color: 'positive' })
         router.push({ name: 'home' })
       } catch (error) {
